@@ -5,5 +5,5 @@ Server/Client file transfer system.
   go get github.com/harveywangdao/filetransfer
 
 #### Usage on ubuntu
-  go run ftp_server.go 
-  go run ftp_client.go upload file.txt 
+  go run ftp_server.go  
+  go run ftp_client.go upload file.txt  
