@@ -375,12 +375,20 @@ func searchFiles(fileNames []string) error {
 
 func ftpClientInit() {
 	if runtime.GOOS == "windows" {
-		DownloadDir = "D:\\LearnPro\\Golang\\download\\"
+		DownloadDir = "D:\\download\\"
 		IPPort = "192.168.195.129:1263"
 	} else {
-		DownloadDir = "/home/thomas/download/"
+		if home := os.Getenv("HOME"); home != "" {
+			DownloadDir = home + "/download/"
+		} else {
+			DownloadDir = "/download/"
+		}
+
 		IPPort = "127.0.0.1:1263"
 	}
+
+	log.Debug("DownloadDir = %v", DownloadDir)
+	log.Debug("IPPort = %v", IPPort)
 }
 
 func main() {

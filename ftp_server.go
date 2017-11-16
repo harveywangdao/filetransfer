@@ -11,6 +11,7 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -19,11 +20,12 @@ const (
 	DownloadCommond    = "download"
 	ShowCommond        = "show"
 	SearchCommond      = "search"
-	UploadDir          = "/home/thomas/upload/"
 	OperationSecOffset = 16
 	FileNameSecOffset  = 256 + OperationSecOffset
 	FileSizeSecOffset  = 8 + FileNameSecOffset
 )
+
+var UploadDir string
 
 func GetValidByte(src []byte) []byte {
 	var str_buf []byte
@@ -344,7 +346,22 @@ func handleConn(conn net.Conn) {
 	}
 }
 
+func ftpServerInit() {
+	if runtime.GOOS == "windows" {
+		UploadDir = "D:\\filetransferdir\\"
+	} else {
+		if home := os.Getenv("HOME"); home != "" {
+			UploadDir = home + "/filetransferdir/"
+		} else {
+			UploadDir = "/filetransferdir/"
+		}
+	}
+
+	log.Debug("UploadDir = %v", UploadDir)
+}
+
 func main() {
+	ftpServerInit()
 	ln, err := net.Listen("tcp", ":1263")
 	if err != nil {
 		log.Error(err.Error())
